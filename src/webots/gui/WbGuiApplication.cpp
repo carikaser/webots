@@ -205,7 +205,7 @@ void WbGuiApplication::parseArguments() {
 
   // QStringList args = arguments(); ->Line should be removed, now fetching the arguments is done with the parser
   bool logPerformanceMode = false;
-  bool batch = false, stream = false;
+  bool batch = false, mstream = false;
 
   const int size = args.size();
   for (int i = 1; i < size; ++i) {
