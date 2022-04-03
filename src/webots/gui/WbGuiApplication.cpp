@@ -41,6 +41,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
+#include <QtCore/QCommandLineParser>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QScreen>
 
@@ -185,9 +186,26 @@ void WbGuiApplication::parseStreamArguments(const QString &streamArguments) {
 
 void WbGuiApplication::parseArguments() {
   // faster when copied according to Qt's doc
-  QStringList args = arguments();
-  bool logPerformanceMode = false, batch = false;
-  mStream = false;
+
+  // Integration of QCommandLineParser
+  QCommandLineParser parser;
+  parser.setOptionsAfterPositionalArgumentsMode(QCommandLineParser::ParseAsOptions);
+  // parser.addPositionalArgument("subcommands", "minimize"); -> add all the subcommands later
+  parser.parse(QCoreApplication::arguments());
+  const QStringList args = parser.positionalArguments();
+
+  /* example of handling a subcommand
+  if (!parserArgs.isEmpty()) {
+    const QString subCommand = parserArgs.first();
+    if (subCommand == "minimize") {
+      parserArgs.pop_front();
+      subProgram(parserArgs);
+    }
+  } */
+
+  // QStringList args = arguments(); ->Line should be removed, now fetching the arguments is done with the parser
+  bool logPerformanceMode = false;
+  bool batch = false, stream = false;
 
   const int size = args.size();
   for (int i = 1; i < size; ++i) {
